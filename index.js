@@ -1,7 +1,7 @@
 // Express initializes app to be a function handler that you can supply to an HTTP server (as seen in line 2).
 var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 // We define a route handler / that gets called when we hit our website home.
 app.get('/', function(req, res){
@@ -22,7 +22,8 @@ io.on('connection', function(socket){
     });
 });
 
-// We make the http server listen on port 3000.
-http.listen(3000, function(){
-    console.log('listening on *:3000');
+// We make the http server listen on port
+port = 3000
+server.listen(port, function(){
+    console.log('listening on *:' + port);
 });
