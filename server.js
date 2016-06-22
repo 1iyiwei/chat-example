@@ -1,29 +1,46 @@
+"use strict";
+
 // Express initializes app to be a function handler that you can supply to an HTTP server (as seen in line 2).
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-// We define a route handler / that gets called when we hit our website home.
-app.get('/', function(req, res){
+function onGet(req, res)
+{
     // res.send('<h1>Hello world</h1>'); 
     res.sendFile(__dirname + '/client.html');
-});
+}
 
-io.on('connection', function(socket){
+// We define a route handler / that gets called when we hit our website home.
+app.get('/', onGet);
+
+function onChat(msg)
+{
+    // console.log('message: ' + msg); 
+    io.emit('chat message', msg);
+}
+
+function onDisconnect()
+{
+    console.log('user disconnected');
+}
+
+function onConnect(socket)
+{
     console.log('a user connected'); 
 
-    socket.on('chat message', function(msg){
-        // console.log('message: ' + msg); 
-        io.emit('chat message', msg);
-    });
+    socket.on('chat message', onChat);
 
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-    });
-});
+    socket.on('disconnect', onDisconnect);
+}
+
+io.on('connection', onConnect);
 
 // We make the http server listen on port
-port = 3000
-server.listen(port, function(){
+var port = 3000;
+function onListen()
+{
     console.log('listening on *:' + port);
-});
+}
+
+server.listen(port, onListen);
