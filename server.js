@@ -6,7 +6,7 @@ var io = require('socket.io')(server);
 // We define a route handler / that gets called when we hit our website home.
 app.get('/', function(req, res){
     // res.send('<h1>Hello world</h1>'); 
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/client.html');
 });
 
 io.on('connection', function(socket){
